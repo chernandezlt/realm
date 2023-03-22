@@ -196,6 +196,6 @@ export default createRealmContext({
     FilesQueue,
     File,
   ],
-  schemaVersion: 1,
+  schemaVersion: 2,
   deleteRealmIfMigrationNeeded: true,
 });
