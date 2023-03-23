@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   FlatList,
@@ -14,26 +14,37 @@ import {
 import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
 import RealmDatabase from '../../store/database/RealmDatabase';
 
-const {useRealm, useQuery, useObject} = RealmDatabase;
+const {useRealm} = RealmDatabase;
 
 const Home = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const realm = useRealm();
-  const resultLoads = realm.objects('Load');
+  const [loads, setLoads] = useState();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  const writeInReal = () => {
-    const id = Math.random().toString();
+  const writeInRealm = () => {
+    const id = Math.floor(Math.random() * 1000).toString();
     realm.write(() => {
       realm.create('Load', {
         id: id,
         loadKey: `${id}0`,
       });
     });
+
+    getLoads();
   };
+
+  useEffect(() => {
+    getLoads();
+  }, []);
+
+  function getLoads() {
+    const resultLoads = realm.objects('Load');
+    setLoads(resultLoads);
+  }
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -46,11 +57,11 @@ const Home = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Button onPress={writeInReal} title={'Write in realm'} />
+          <Button onPress={writeInRealm} title={'Write in realm'} />
 
           <View style={{backgroundColor: 'red', flex: 1}}>
             <FlatList
-              data={resultLoads}
+              data={loads}
               keyExtractor={item => item.id}
               renderItem={({item}) => (
                 <View style={{backgroundColor: 'green', flex: 1}}>
