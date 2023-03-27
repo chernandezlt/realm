@@ -1,3 +1,4 @@
+import 'react-native-reanimated';
 import React from 'react';
 
 import RealmDatabase from './store/database/RealmDatabase';
