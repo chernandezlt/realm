@@ -27,12 +27,17 @@ const Home = () => {
 
   const writeInRealm = () => {
     const id = Math.floor(Math.random() * 1000).toString();
-    realm.write(() => {
-      realm.create('Load', {
-        id: id,
-        loadKey: `${id}0`,
+
+    try {
+      realm.write(() => {
+        realm.create('Load', {
+          id: id,
+          loadKey: `${id}0`,
+        });
       });
-    });
+    } catch (e) {
+      alert(e);
+    }
 
     getLoads();
   };
